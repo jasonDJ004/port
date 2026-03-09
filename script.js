@@ -45,28 +45,71 @@ function renderMessages() {
 }
 
 // =============================================
+//  WEB3FORMS CONFIG — Replace with your key!
+//  Get free key at: https://web3forms.com
+//  Enter email: divinejasond2005@gmail.com
+// =============================================
+const WEB3FORMS_KEY = '4a03dbcc-3678-44cb-a334-e0d9aea2c6cb';
+
+// =============================================
 //  CONTACT FORM SUBMIT
 // =============================================
 const contactForm = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submit-btn');
+const successEl = document.getElementById('form-success');
+
 if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
+    contactForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const msg = {
-            name: document.getElementById('contact-name').value.trim(),
-            email: document.getElementById('contact-email').value.trim(),
-            subject: document.getElementById('contact-subject').value.trim(),
-            message: document.getElementById('contact-message').value.trim()
-        };
+        const name    = document.getElementById('contact-name').value.trim();
+        const email   = document.getElementById('contact-email').value.trim();
+        const subject = document.getElementById('contact-subject').value.trim();
+        const message = document.getElementById('contact-message').value.trim();
 
-        saveMessage(msg);
-        contactForm.reset();
-
-        const successEl = document.getElementById('form-success');
-        successEl.classList.remove('hidden');
-        setTimeout(() => successEl.classList.add('hidden'), 3500);
-
+        // 1) Save to localStorage (local backup)
+        saveMessage({ name, email, subject, message });
         renderMessages();
+
+        // 2) Send via Web3Forms to divinejasond2005@gmail.com
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    access_key: WEB3FORMS_KEY,
+                    name,
+                    email,
+                    subject: `Portfolio Contact: ${subject}`,
+                    message,
+                    from_name: 'Divine Jason Portfolio'
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                contactForm.reset();
+                successEl.innerHTML = '<i class="fas fa-check-circle"></i> Message sent! I\'ll get back to you soon.';
+                successEl.style.background = '#ecfdf5';
+                successEl.style.color = '#059669';
+            } else {
+                throw new Error('Send failed');
+            }
+        } catch (err) {
+            // Still saved locally — show warning
+            successEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Message saved locally. Email delivery needs Web3Forms key setup.';
+            successEl.style.background = '#fffbeb';
+            successEl.style.color = '#d97706';
+        }
+
+        successEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Message <i class="fas fa-paper-plane"></i>';
+        setTimeout(() => successEl.classList.add('hidden'), 5000);
     });
 }
 
