@@ -365,7 +365,9 @@
                 <div id="messages-list"></div>
             </div>
             <div style="text-align:center; margin-top: 20px;">
-                <button id="toggle-inbox" class="btn btn-outline" style="font-size:0.85rem; padding:8px 20px;"><i class="fas fa-inbox"></i> View Inbox</button>
+                <button id="toggle-inbox" class="btn-inbox-lock" title="Owner access">
+                    <i class="fas fa-lock"></i>
+                </button>
             </div>
         </div>
     </section>
@@ -376,6 +378,22 @@
             <p>&copy; 2026 Divine Jason. All rights reserved.</p>
         </div>
     </footer>
+
+
+    <!-- Password Modal -->
+    <div id="inbox-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+            <div class="modal-icon"><i class="fas fa-lock"></i></div>
+            <h3>Owner Access</h3>
+            <p>Enter your password to view inbox messages.</p>
+            <div class="modal-input-wrap">
+                <input type="password" id="inbox-password" placeholder="Enter password" autocomplete="off">
+                <button id="inbox-submit" class="btn btn-primary" style="width:100%; margin-top:12px;">Unlock Inbox</button>
+            </div>
+            <p id="inbox-error" class="modal-error hidden"><i class="fas fa-exclamation-circle"></i> Incorrect password. Try again.</p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

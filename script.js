@@ -70,17 +70,83 @@ if (contactForm) {
     });
 }
 
-// Inbox toggle
+// =============================================
+//  INBOX PASSWORD GATE
+// =============================================
+const INBOX_PASSWORD = 'Divine@2005';
+const SESSION_KEY = 'inbox_unlocked';
+
 const toggleInbox = document.getElementById('toggle-inbox');
 const messagesPanel = document.getElementById('messages-panel');
-if (toggleInbox && messagesPanel) {
+const inboxModal = document.getElementById('inbox-modal');
+const modalClose = document.getElementById('modal-close');
+const inboxPasswordInput = document.getElementById('inbox-password');
+const inboxSubmit = document.getElementById('inbox-submit');
+const inboxError = document.getElementById('inbox-error');
+
+function openInbox() {
+    messagesPanel.classList.remove('hidden');
+    renderMessages();
+    sessionStorage.setItem(SESSION_KEY, '1');
+}
+
+function tryUnlock() {
+    if (inboxPasswordInput.value === INBOX_PASSWORD) {
+        inboxModal.classList.add('hidden');
+        inboxError.classList.add('hidden');
+        inboxPasswordInput.value = '';
+        openInbox();
+    } else {
+        inboxError.classList.remove('hidden');
+        inboxPasswordInput.value = '';
+        inboxPasswordInput.focus();
+        inboxPasswordInput.style.borderColor = '#dc2626';
+        setTimeout(() => inboxPasswordInput.style.borderColor = '', 1500);
+    }
+}
+
+if (toggleInbox) {
     toggleInbox.addEventListener('click', () => {
-        messagesPanel.classList.toggle('hidden');
-        const isHidden = messagesPanel.classList.contains('hidden');
-        toggleInbox.innerHTML = isHidden
-            ? '<i class="fas fa-inbox"></i> View Inbox'
-            : '<i class="fas fa-inbox"></i> Hide Inbox';
-        if (!isHidden) renderMessages();
+        // Already unlocked this session — toggle directly
+        if (sessionStorage.getItem(SESSION_KEY)) {
+            if (messagesPanel.classList.contains('hidden')) {
+                openInbox();
+            } else {
+                messagesPanel.classList.add('hidden');
+            }
+        } else {
+            // Show password modal
+            inboxModal.classList.remove('hidden');
+            setTimeout(() => inboxPasswordInput.focus(), 100);
+        }
+    });
+}
+
+if (modalClose) {
+    modalClose.addEventListener('click', () => {
+        inboxModal.classList.add('hidden');
+        inboxError.classList.add('hidden');
+        inboxPasswordInput.value = '';
+    });
+}
+
+if (inboxModal) {
+    inboxModal.addEventListener('click', (e) => {
+        if (e.target === inboxModal) {
+            inboxModal.classList.add('hidden');
+            inboxError.classList.add('hidden');
+            inboxPasswordInput.value = '';
+        }
+    });
+}
+
+if (inboxSubmit) {
+    inboxSubmit.addEventListener('click', tryUnlock);
+}
+
+if (inboxPasswordInput) {
+    inboxPasswordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') tryUnlock();
     });
 }
 
