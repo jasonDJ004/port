@@ -8,10 +8,29 @@
     --text-muted: #64748b;
     --card-bg: #ffffff;
     --border-color: #e2e8f0;
+    --input-bg: var(--bg-light);
+    --navbar-bg: rgba(255, 255, 255, 0.9);
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
     --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
     --transition: all 0.3s ease;
+}
+
+body.dark-mode {
+    --primary: #00E5FF;
+    --primary-light: #1FB6FF;
+    --secondary: #E6EDF3;
+    --bg-color: #0A0F14;
+    --bg-light: #121A22;
+    --text-main: #E6EDF3;
+    --text-muted: #8B949E;
+    --card-bg: #1A222B;
+    --border-color: #1F2A35;
+    --input-bg: #050A0F;
+    --navbar-bg: rgba(10, 15, 20, 0.9);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
 }
 
 * {
@@ -149,7 +168,7 @@ h1, h2, h3, h4 {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--navbar-bg);
     backdrop-filter: blur(10px);
     z-index: 1000;
     box-shadow: var(--shadow-sm);
@@ -273,7 +292,7 @@ h1, h2, h3, h4 {
     font-size: 4rem;
     line-height: 1.2;
     margin-bottom: 20px;
-    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    background: linear-gradient(90deg, #00E5FF, #00FFA3);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -704,7 +723,7 @@ h1, h2, h3, h4 {
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     color: var(--text-main);
-    background: var(--bg-light);
+    background: var(--input-bg);
     transition: var(--transition);
     outline: none;
     resize: none;
